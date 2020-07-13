@@ -24,3 +24,7 @@ after_success:
   - docker push vihuvac/multi-nginx
   - docker push vihuvac/multi-server
   - docker push vihuvac/multi-worker
+
+deploy:
+  on:
+    branch: master
