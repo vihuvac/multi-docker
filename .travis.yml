@@ -1,0 +1,26 @@
+language: generic
+sudo: required
+services:
+  - docker
+
+before_install:
+  - docker build -t vihuvac/react-test -f ./client/Dockerfile.dev ./client
+
+script:
+  - docker run -e CI=true vihuvac/react-test npm run test
+
+after_success:
+  # Create docker images for being pushed to docker hub.
+  - docker build -t vihuvac/multi-client ./client
+  - docker build -t vihuvac/multi-nginx ./nginx
+  - docker build -t vihuvac/multi-server ./server
+  - docker build -t vihuvac/multi-worker ./worker
+
+  # Docker login to CLI.
+  echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+
+  # Take those images and push them to docker hub.
+  - docker push vihuvac/multi-client
+  - docker push vihuvac/multi-nginx
+  - docker push vihuvac/multi-server
+  - docker push vihuvac/multi-worker
