@@ -1,0 +1,39 @@
+{
+  "AWSEBDockerrunVersion": 2,
+  "containerDefinitions": [
+    {
+      "name": "client",
+      "image": "vihuvac/multi-client",
+      "hostname": "client",
+      "memory": 128,
+      "essential": false
+    },
+    {
+      "name": "server",
+      "image": "vihuvac/multi-server",
+      "hostname": "api",
+      "memory": 128,
+      "essential": false
+    },
+    {
+      "name": "worker",
+      "image": "vihuvac/multi-worker",
+      "hostname": "worker",
+      "memory": 128,
+      "essential": false
+    },
+    {
+      "name": "nginx",
+      "image": "vihuvac/multi-nginx",
+      "memory": 128,
+      "essential": true,
+      "portMappings": [
+        {
+          "hostPort": 80,
+          "containerPort": 80
+        }
+      ],
+      "links": ["client", "server"]
+    }
+  ]
+}
